@@ -1,0 +1,236 @@
+{
+  "zones": [
+    {
+      "id": "desert",
+      "title": "Hot Desert",
+      "prompt": "Blazing heat and scarce water",
+      "pressures": [
+        "Daytime temperatures can quickly overheat bodies.",
+        "Water loss makes cooling risky."
+      ],
+      "pick": { "count": 2 },
+      "meters": [
+        { "id": "heat", "label": "Heat", "start": 0 },
+        { "id": "water", "label": "Water", "start": 0 }
+      ],
+      "options": [
+        {
+          "id": "nocturnal",
+          "label": "Nocturnal behaviour",
+          "short": "Active at night, rest in shade by day",
+          "effects": { "heat": 2, "water": 1 },
+          "tradeoff": "Less time to feed; relies on safe shelter.",
+          "examples": {
+            "human": "People shift activity to cooler hours.",
+            "animal": "Fennec foxes hunt at night." 
+          }
+        },
+        {
+          "id": "sweat",
+          "label": "High sweating rate",
+          "short": "Cools quickly through evaporation",
+          "effects": { "heat": 3, "water": -3 },
+          "tradeoff": "Great cooling, but dehydrates fast.",
+          "examples": {
+            "human": "Humans sweat to cool down.",
+            "animal": "Horses sweat heavily and need water." 
+          }
+        },
+        {
+          "id": "light-color",
+          "label": "Light-colored skin or fur",
+          "short": "Reflects sunlight",
+          "effects": { "heat": 2, "water": 0 },
+          "tradeoff": "Less protection from cold nights.",
+          "examples": {
+            "human": "Light fabrics reflect sun.",
+            "animal": "Desert hares have pale coats." 
+          }
+        },
+        {
+          "id": "water-storage",
+          "label": "Water storage",
+          "short": "Stores water in body tissues",
+          "effects": { "heat": -1, "water": 3 },
+          "tradeoff": "Carrying extra weight costs energy.",
+          "examples": {
+            "human": "Canteens help but add weight.",
+            "animal": "Camels store water and fat." 
+          }
+        },
+        {
+          "id": "burrow",
+          "label": "Burrowing",
+          "short": "Hide underground during peak heat",
+          "effects": { "heat": 2, "water": 0 },
+          "tradeoff": "Hard work to dig and less surface time.",
+          "examples": {
+            "human": "People build shaded shelters.",
+            "animal": "Kangaroo rats stay in burrows." 
+          }
+        }
+      ],
+      "survival_rule": {
+        "type": "threshold",
+        "thresholds": { "heat": 1, "water": 1 }
+      },
+      "result_text": {
+        "survive_title": "Survived!",
+        "fail_title": "Did not survive",
+        "survive_takeaway": "You balanced cooling with water conservation.",
+        "fail_takeaway": "You solved one problem but the trade-off caused failure."
+      }
+    },
+    {
+      "id": "cold",
+      "title": "Cold Zone",
+      "prompt": "Freezing temperatures with limited food",
+      "pressures": [
+        "Heat escapes quickly in icy air.",
+        "Finding enough energy is tough."
+      ],
+      "pick": { "count": 2 },
+      "meters": [
+        { "id": "heat", "label": "Heat Retention", "start": 0 },
+        { "id": "energy", "label": "Energy Budget", "start": 0 }
+      ],
+      "options": [
+        {
+          "id": "thick-fur",
+          "label": "Thick insulation",
+          "short": "Dense fur or fat layer",
+          "effects": { "heat": 3, "energy": -1 },
+          "tradeoff": "Warm but costly to grow.",
+          "examples": {
+            "human": "Puffy coats trap heat.",
+            "animal": "Polar bears have thick fur." 
+          }
+        },
+        {
+          "id": "hibernation",
+          "label": "Seasonal hibernation",
+          "short": "Slow down to save energy",
+          "effects": { "heat": 1, "energy": 3 },
+          "tradeoff": "Less time to find mates or food.",
+          "examples": {
+            "human": "People stay indoors to conserve heat.",
+            "animal": "Ground squirrels hibernate." 
+          }
+        },
+        {
+          "id": "large-body",
+          "label": "Large body size",
+          "short": "Retains heat longer",
+          "effects": { "heat": 2, "energy": -2 },
+          "tradeoff": "Needs more food to power the body.",
+          "examples": {
+            "human": "Layering increases body mass.",
+            "animal": "Musk oxen are bulky." 
+          }
+        },
+        {
+          "id": "fast-metabolism",
+          "label": "Fast metabolism",
+          "short": "Burns fuel to stay warm",
+          "effects": { "heat": 2, "energy": -3 },
+          "tradeoff": "Warmer but hungry all the time.",
+          "examples": {
+            "human": "Shivering uses energy.",
+            "animal": "Small birds eat constantly." 
+          }
+        },
+        {
+          "id": "group-heat",
+          "label": "Group huddling",
+          "short": "Share warmth with others",
+          "effects": { "heat": 2, "energy": 1 },
+          "tradeoff": "Must stay close and share space.",
+          "examples": {
+            "human": "People gather around heaters.",
+            "animal": "Penguins huddle in storms." 
+          }
+        }
+      ],
+      "survival_rule": {
+        "type": "threshold",
+        "thresholds": { "heat": 1, "energy": 1 }
+      },
+      "result_text": {
+        "survive_title": "Survived!",
+        "fail_title": "Did not survive",
+        "survive_takeaway": "You kept warm without running out of energy.",
+        "fail_takeaway": "You gained warmth, but the energy cost was too high."
+      }
+    },
+    {
+      "id": "oxygen",
+      "title": "Low Oxygen",
+      "prompt": "Thin air at high altitude",
+      "pressures": [
+        "Less oxygen enters the lungs each breath.",
+        "Pushing the body too hard has costs."
+      ],
+      "pick": { "count": 1 },
+      "meters": [
+        { "id": "delivery", "label": "Oxygen Delivery", "start": 0 },
+        { "id": "cost", "label": "Physiological Cost", "start": 0 }
+      ],
+      "options": [
+        {
+          "id": "big-lungs",
+          "label": "Bigger lungs",
+          "short": "Move more air each breath",
+          "effects": { "delivery": 3, "cost": -1 },
+          "tradeoff": "Larger chest takes more energy to maintain.",
+          "examples": {
+            "human": "Athletes train to expand lung capacity.",
+            "animal": "Llamas have large lungs." 
+          }
+        },
+        {
+          "id": "extra-hemoglobin",
+          "label": "More hemoglobin",
+          "short": "Carry more oxygen in the blood",
+          "effects": { "delivery": 2, "cost": -2 },
+          "tradeoff": "Thicker blood is harder to pump.",
+          "examples": {
+            "human": "High-altitude people make more red cells.",
+            "animal": "Bar-headed geese boost hemoglobin." 
+          }
+        },
+        {
+          "id": "slow-metabolism",
+          "label": "Slow metabolism",
+          "short": "Use less oxygen overall",
+          "effects": { "delivery": 1, "cost": 2 },
+          "tradeoff": "Moves slower and reacts less quickly.",
+          "examples": {
+            "human": "People pace themselves at altitude.",
+            "animal": "Tortoises conserve energy." 
+          }
+        },
+        {
+          "id": "efficient-heart",
+          "label": "Efficient heart",
+          "short": "Moves oxygen with less effort",
+          "effects": { "delivery": 2, "cost": 1 },
+          "tradeoff": "Needs training and strong muscle.",
+          "examples": {
+            "human": "Endurance athletes improve heart efficiency.",
+            "animal": "Snow leopards have strong hearts." 
+          }
+        }
+      ],
+      "survival_rule": {
+        "type": "threshold",
+        "thresholds": { "delivery": 1, "cost": 0 }
+      },
+      "result_text": {
+        "survive_title": "Survived!",
+        "fail_title": "Did not survive",
+        "survive_takeaway": "You delivered enough oxygen without overloading the body.",
+        "fail_takeaway": "You boosted oxygen, but the costs overwhelmed you."
+      }
+    }
+  ]
+}
