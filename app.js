@@ -48,6 +48,7 @@ const state = {
   screen: "home",
   zoneIndex: 0,
   avatar: "🧬", 
+  playerName: "",
   selections: {},
   results: {},
   data: null
@@ -66,6 +67,7 @@ const resetState = () => {
   state.zoneIndex = 0;
   state.selections = {};
   state.results = {};
+  state.playerName = "";
   document.body.className = "";
 };
 
@@ -112,7 +114,18 @@ const renderHome = () => `
 
 const renderCreate = () => `
   <section class="screen">
-    <h2>Select Organism</h2>
+    <h2>Create Your Organism</h2>
+    <label class="input-label" for="playerName">Choose a name</label>
+    <input
+      id="playerName"
+      class="text-input"
+      type="text"
+      maxlength="20"
+      placeholder="Enter your organism name"
+      value="${state.playerName}"
+      oninput="state.playerName=this.value; playSound('click');"
+    />
+    <p class="helper-text">Select an avatar (profile picture)</p>
     <div class="avatar-grid">
       ${avatars.map(icon => `
         <button class="avatar-btn ${state.avatar === icon ? 'selected' : ''}" 
@@ -328,11 +341,29 @@ const nextZone = () => {
 
 const renderSummary = () => {
   const wins = Object.values(state.results).filter(r=>r.survived).length;
+  const adaptations = state.data.zones.map(zone => {
+    const selectedIds = state.selections[zone.id] || [];
+    const selectedLabels = zone.options
+      .filter(opt => selectedIds.includes(opt.id))
+      .map(opt => opt.label);
+    const summaryText = selectedLabels.length ? selectedLabels.join(", ") : "No adaptations selected.";
+    return `
+      <li>
+        <strong>${zone.title}:</strong> ${summaryText}
+      </li>
+    `;
+  }).join("");
   appRoot.innerHTML = `
     <section class="screen" style="text-align:center">
       <h1>Evolution Complete</h1>
       <div style="font-size:4rem; margin:1rem;">${state.avatar}</div>
-      <h2>You survived ${wins} / 3 Environments</h2>
+      <h2>${state.playerName ? `${state.playerName}, ` : ""}you survived ${wins} / 3 Environments</h2>
+      <div class="summary-section" style="margin-top:1.5rem; text-align:left;">
+        <h3>Chosen Adaptations Summary</h3>
+        <ul class="summary-list">
+          ${adaptations}
+        </ul>
+      </div>
       <button class="primary-button" onclick="resetState(); render();">Evolve Again</button>
     </section>
   `;

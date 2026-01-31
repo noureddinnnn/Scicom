@@ -94,6 +94,32 @@ body {
 h1, h2 { margin-top: 0; }
 h2 { border-bottom: 2px solid var(--accent); display: inline-block; padding-bottom: 0.5rem; }
 
+/* Inputs */
+.input-label {
+  display: block;
+  margin-top: 1rem;
+  font-weight: 700;
+}
+.text-input {
+  width: 100%;
+  margin-top: 0.5rem;
+  padding: 0.75rem 1rem;
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,0.2);
+  background: rgba(0,0,0,0.2);
+  color: var(--text);
+  font-size: 1rem;
+}
+.text-input:focus {
+  outline: 2px solid var(--accent);
+  border-color: var(--accent);
+}
+.helper-text {
+  margin: 1rem 0 0.5rem;
+  color: var(--muted);
+  font-size: 0.95rem;
+}
+
 /* Grid & Cards */
 .card-grid {
   display: grid;
@@ -172,3 +198,21 @@ canvas { width: 100%; height: 100%; }
 .avatar-grid { display: flex; gap: 1rem; justify-content: center; margin: 1rem 0; flex-wrap: wrap; }
 .avatar-btn { font-size: 3rem; background: transparent; border: 2px solid rgba(255,255,255,0.1); border-radius: 12px; cursor: pointer; padding: 0.5rem; }
 .avatar-btn.selected { border-color: var(--accent); background: rgba(255,255,255,0.05); }
+
+.summary-section {
+  background: rgba(0,0,0,0.2);
+  border-radius: 16px;
+  padding: 1rem 1.5rem;
+}
+.summary-list {
+  list-style: none;
+  padding-left: 0;
+  margin: 0.75rem 0 0;
+}
+.summary-list li {
+  padding: 0.5rem 0;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+.summary-list li:last-child {
+  border-bottom: none;
+}
