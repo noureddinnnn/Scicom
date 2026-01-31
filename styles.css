@@ -50,10 +50,53 @@ body {
     url('data:image/svg+xml;utf8,<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><circle cx="50" cy="50" r="2" fill="orange" opacity="0.5"/></svg>');
   background-size: cover, 120px 120px;
   background-position: center, 0 0;
-  animation: heatRise 3s linear infinite;
+  background-image:
+    url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 800'><rect width='1200' height='800' fill='none'/><path d='M0 600 Q180 520 360 600 T720 600 T1200 600 V800 H0 Z' fill='%23e6f7ff' opacity='0.8'/><path d='M0 680 Q240 620 480 680 T960 680 T1200 680 V800 H0 Z' fill='%23d4eefc' opacity='0.9'/></svg>"),
+    radial-gradient(4px 4px at 100px 50px, #fff, transparent),
+    radial-gradient(6px 6px at 200px 150px, #fff, transparent),
+    radial-gradient(3px 3px at 300px 250px, #fff, transparent);
+  background-size: cover, 650px 650px, 500px 500px, 800px 800px;
+  background-position: center, 0 0, 0 0, 0 0;
 }
-@keyframes heatRise {
-  from { transform: translateY(0) scale(1); opacity: 0; }
+  from { background-position: center, 0 0, 0 0, 0 0; }
+  to { background-position: center, 0 650px, 0 400px, 0 500px; }
+}
+
+/* HIGH ALTITUDE: Mountain Peak */
+.theme-oxygen .weather-layer {
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 800'><rect width='1200' height='800' fill='none'/><path d='M0 700 L250 420 L500 700 Z' fill='%235f6c7b' opacity='0.8'/><path d='M350 700 L650 320 L950 700 Z' fill='%237c8ea6' opacity='0.9'/><path d='M650 320 L750 460 L550 460 Z' fill='%23f5f7fa' opacity='0.95'/><path d='M0 750 Q240 700 480 750 T960 750 T1200 750 V800 H0 Z' fill='%23404b59' opacity='0.9'/></svg>");
+  background-size: cover;
+  background-position: center;
+/* Inputs */
+.input-label {
+  display: block;
+  margin-top: 1rem;
+  font-weight: 700;
+}
+.text-input {
+  width: 100%;
+  margin-top: 0.5rem;
+  padding: 0.75rem 1rem;
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,0.2);
+  background: rgba(0,0,0,0.2);
+  color: var(--text);
+  font-size: 1rem;
+}
+.text-input:focus {
+  outline: 2px solid var(--accent);
+  border-color: var(--accent);
+}
+.helper-text {
+  margin: 1rem 0 0.5rem;
+  color: var(--muted);
+  font-size: 0.95rem;
+}
+.zone-instructions {
+  color: var(--muted);
+  margin-top: 0.5rem;
+  font-size: 1rem;
+}
   50% { opacity: 1; }
   to { transform: translateY(-50px) scale(1.2); opacity: 0; }
 }
@@ -146,7 +189,31 @@ h2 { border-bottom: 2px solid var(--accent); display: inline-block; padding-bott
   margin-top: 1.5rem;
 }
 
-.option-card {
+.avatar-btn.selected { border-color: var(--accent); background: rgba(255,255,255,0.05); }
+
+.summary-section {
+  background: rgba(0,0,0,0.2);
+  border-radius: 16px;
+  padding: 1rem 1.5rem;
+}
+.summary-list {
+  list-style: none;
+  padding-left: 0;
+  margin: 0.75rem 0 0;
+}
+.summary-list li {
+  padding: 0.5rem 0;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+.summary-list li:last-child {
+  border-bottom: none;
+}
+.summary-note {
+  margin-top: 1rem;
+  color: var(--muted);
+  font-size: 0.95rem;
+  line-height: 1.4;
+}
   border: 2px solid rgba(255,255,255,0.1);
   background: var(--card-bg);
   padding: 1.5rem;

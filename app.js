@@ -49,7 +49,23 @@ const state = {
   zoneIndex: 0,
   avatar: "🧬", 
   playerName: "",
-  selections: {},
+const avatars = ["🐻‍❄️", "🦒", "🐪", "👦", "👧"];
+  state.playerName = "";
+    <h2>Create Your Organism</h2>
+    <label class="input-label" for="playerName">Choose a name</label>
+    <input
+      id="playerName"
+      class="text-input"
+      type="text"
+      maxlength="20"
+      placeholder="Enter your organism name"
+      value="${state.playerName}"
+      oninput="state.playerName=this.value; playSound('click');"
+    />
+    <p class="helper-text">Select an avatar (profile picture)</p>
+      <p class="zone-instructions">
+        Choose ${zone.pick.count} adaptations. Aim to meet the minimums for ${zone.meters.map(m => m.label).join(" and ")}.
+      </p>
   results: {},
   data: null
 };
@@ -303,8 +319,48 @@ const renderBar = (meter, value) => {
 
   return `
     <div class="meter-box">
-      <div class="meter-label">
-        <span>${meter.label}</span>
+  const adaptations = state.data.zones.map(zone => {
+    const selectedIds = state.selections[zone.id] || [];
+    const selectedLabels = zone.options
+      .filter(opt => selectedIds.includes(opt.id))
+      .map(opt => opt.label);
+    const summaryText = selectedLabels.length ? selectedLabels.join(", ") : "No adaptations selected.";
+    return `
+      <li>
+        <strong>${zone.title}:</strong> ${summaryText}
+      </li>
+    `;
+  }).join("");
+  const evolutionMatches = state.data.zones.map(zone => {
+    const selectedIds = state.selections[zone.id] || [];
+    const match = zone.matches?.find(m => m.traits.every(t => selectedIds.includes(t)));
+    const matchText = match
+      ? `Your choices align with the ${match.animal} survival strategy.`
+      : "Your organism followed a distinct survival strategy.";
+    return `
+      <li>
+        <strong>${zone.title}:</strong> ${matchText}
+      </li>
+    `;
+  }).join("");
+      <h2>${state.playerName ? `${state.playerName}, ` : ""}you survived ${wins} / 3 Environments</h2>
+      <div class="summary-section" style="margin-top:1.5rem; text-align:left;">
+        <h3>Chosen Adaptations Summary</h3>
+        <ul class="summary-list">
+          ${adaptations}
+        </ul>
+      </div>
+      <div class="summary-section" style="margin-top:1.5rem; text-align:left;">
+        <h3>Evolution Matchups</h3>
+        <ul class="summary-list">
+          ${evolutionMatches}
+        </ul>
+        <p class="summary-note">
+          Evolution is about smart balance, not collecting every advantage. The most successful organisms combine
+          just enough traits to stay stable when conditions change.
+        </p>
+      </div>
+loadData();
         <span>${value} (Need ${min})</span>
       </div>
       <div class="meter-track">
