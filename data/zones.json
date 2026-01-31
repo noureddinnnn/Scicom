@@ -3,233 +3,191 @@
     {
       "id": "desert",
       "title": "Hot Desert",
-      "prompt": "Blazing heat and scarce water",
-      "pressures": [
-        "Daytime temperatures can quickly overheat bodies.",
-        "Water loss makes cooling risky."
-      ],
+      "prompt": "Extreme heat (45°C+) and water scarcity",
       "pick": { "count": 2 },
       "meters": [
-        { "id": "heat", "label": "Heat", "start": 0 },
-        { "id": "water", "label": "Water", "start": 0 }
+        { "id": "heat", "label": "Cooling", "start": 0, "min": 1 },
+        { "id": "water", "label": "Hydration", "start": 0, "min": 1 }
+      ],
+      "matches": [
+        {
+          "animal": "Fennec Fox",
+          "traits": ["nocturnal", "large-ears"],
+          "desc": "Like the Fennec Fox, you avoid the sun and radiate heat."
+        },
+        {
+          "animal": "Camel",
+          "traits": ["water-storage", "concentrated-urine"],
+          "desc": "Classic Camel strategy: Store water and don't waste a drop."
+        }
       ],
       "options": [
         {
           "id": "nocturnal",
           "label": "Nocturnal behaviour",
-          "short": "Active at night, rest in shade by day",
-          "effects": { "heat": 2, "water": 1 },
-          "tradeoff": "Less time to feed; relies on safe shelter.",
-          "examples": {
-            "human": "People shift activity to cooler hours.",
-            "animal": "Fennec foxes hunt at night." 
-          }
+          "category": "Behavioral",
+          "short": "Active at night to avoid solar radiation",
+          "effects": { "heat": 2, "water": 1 }
         },
         {
           "id": "sweat",
           "label": "High sweating rate",
-          "short": "Cools quickly through evaporation",
-          "effects": { "heat": 3, "water": -3 },
-          "tradeoff": "Great cooling, but dehydrates fast.",
-          "examples": {
-            "human": "Humans sweat to cool down.",
-            "animal": "Horses sweat heavily and need water." 
-          }
+          "category": "Physiological",
+          "short": "Evaporative cooling mechanism",
+          "effects": { "heat": 3, "water": -3 }
         },
         {
           "id": "light-color",
-          "label": "Light-colored skin or fur",
-          "short": "Reflects sunlight",
-          "effects": { "heat": 2, "water": 0 },
-          "tradeoff": "Less protection from cold nights.",
-          "examples": {
-            "human": "Light fabrics reflect sun.",
-            "animal": "Desert hares have pale coats." 
-          }
+          "label": "Pale pigmentation",
+          "category": "Structural",
+          "short": "Reflects solar radiation (High Albedo)",
+          "effects": { "heat": 2, "water": 0 }
+        },
+        {
+          "id": "large-ears",
+          "label": "Large ears",
+          "category": "Structural",
+          "short": "Increases Surface Area to Volume ratio",
+          "effects": { "heat": 2, "water": 0 }
+        },
+        {
+          "id": "concentrated-urine",
+          "label": "Concentrated urine",
+          "category": "Physiological",
+          "short": "Loop of Henle reabsorbs water",
+          "effects": { "heat": 0, "water": 3 }
         },
         {
           "id": "water-storage",
-          "label": "Water storage",
-          "short": "Stores water in body tissues",
-          "effects": { "heat": -1, "water": 3 },
-          "tradeoff": "Carrying extra weight costs energy.",
-          "examples": {
-            "human": "Canteens help but add weight.",
-            "animal": "Camels store water and fat." 
-          }
-        },
-        {
-          "id": "burrow",
-          "label": "Burrowing",
-          "short": "Hide underground during peak heat",
-          "effects": { "heat": 2, "water": 0 },
-          "tradeoff": "Hard work to dig and less surface time.",
-          "examples": {
-            "human": "People build shaded shelters.",
-            "animal": "Kangaroo rats stay in burrows." 
-          }
+          "label": "Fatty Hump",
+          "category": "Structural",
+          "short": "Metabolic water storage",
+          "effects": { "heat": 1, "water": 3 }
         }
       ],
-      "survival_rule": {
-        "type": "threshold",
-        "thresholds": { "heat": 1, "water": 1 }
-      },
       "result_text": {
-        "survive_title": "Survived!",
-        "fail_title": "Did not survive",
-        "survive_takeaway": "You balanced cooling with water conservation.",
-        "fail_takeaway": "You solved one problem but the trade-off caused failure."
+        "survive_title": "SURVIVED",
+        "fail_title": "FAILED",
+        "survive_takeaway": "Your organism maintained homeostasis!",
+        "fail_takeaway": "Your organism could not cope with the environment."
       }
     },
     {
       "id": "cold",
-      "title": "Cold Zone",
-      "prompt": "Freezing temperatures with limited food",
-      "pressures": [
-        "Heat escapes quickly in icy air.",
-        "Finding enough energy is tough."
-      ],
+      "title": "Arctic Tundra",
+      "prompt": "Sub-zero temperatures (-30°C) and limited food",
       "pick": { "count": 2 },
       "meters": [
-        { "id": "heat", "label": "Heat Retention", "start": 0 },
-        { "id": "energy", "label": "Energy Budget", "start": 0 }
+        { "id": "heat", "label": "Insulation", "start": 0, "min": 1 },
+        { "id": "energy", "label": "Energy Reserves", "start": 0, "min": 1 }
+      ],
+      "matches": [
+        {
+          "animal": "Polar Bear",
+          "traits": ["thick-fur", "large-body"],
+          "desc": "You built a tank! Large body and thick fur is the Polar Bear way."
+        }
       ],
       "options": [
         {
           "id": "thick-fur",
-          "label": "Thick insulation",
-          "short": "Dense fur or fat layer",
-          "effects": { "heat": 3, "energy": -1 },
-          "tradeoff": "Warm but costly to grow.",
-          "examples": {
-            "human": "Puffy coats trap heat.",
-            "animal": "Polar bears have thick fur." 
-          }
+          "label": "Thick fur/blubber",
+          "category": "Structural",
+          "short": "Traps air to reduce conduction",
+          "effects": { "heat": 3, "energy": -1 }
         },
         {
           "id": "hibernation",
-          "label": "Seasonal hibernation",
-          "short": "Slow down to save energy",
-          "effects": { "heat": 1, "energy": 3 },
-          "tradeoff": "Less time to find mates or food.",
-          "examples": {
-            "human": "People stay indoors to conserve heat.",
-            "animal": "Ground squirrels hibernate." 
-          }
+          "label": "Hibernation",
+          "category": "Physiological",
+          "short": "Lower metabolic rate to save energy",
+          "effects": { "heat": 1, "energy": 3 }
         },
         {
           "id": "large-body",
-          "label": "Large body size",
-          "short": "Retains heat longer",
-          "effects": { "heat": 2, "energy": -2 },
-          "tradeoff": "Needs more food to power the body.",
-          "examples": {
-            "human": "Layering increases body mass.",
-            "animal": "Musk oxen are bulky." 
-          }
+          "label": "Large body mass",
+          "category": "Structural",
+          "short": "Low Surface Area to Volume ratio",
+          "effects": { "heat": 2, "energy": -2 }
         },
         {
-          "id": "fast-metabolism",
-          "label": "Fast metabolism",
-          "short": "Burns fuel to stay warm",
-          "effects": { "heat": 2, "energy": -3 },
-          "tradeoff": "Warmer but hungry all the time.",
-          "examples": {
-            "human": "Shivering uses energy.",
-            "animal": "Small birds eat constantly." 
-          }
+          "id": "shivering",
+          "label": "Shivering response",
+          "category": "Physiological",
+          "short": "Muscle spasms generate heat",
+          "effects": { "heat": 2, "energy": -3 }
         },
         {
-          "id": "group-heat",
-          "label": "Group huddling",
-          "short": "Share warmth with others",
-          "effects": { "heat": 2, "energy": 1 },
-          "tradeoff": "Must stay close and share space.",
-          "examples": {
-            "human": "People gather around heaters.",
-            "animal": "Penguins huddle in storms." 
-          }
+          "id": "huddling",
+          "label": "Huddling",
+          "category": "Behavioral",
+          "short": "Group body heat sharing",
+          "effects": { "heat": 2, "energy": 1 }
         }
       ],
-      "survival_rule": {
-        "type": "threshold",
-        "thresholds": { "heat": 1, "energy": 1 }
-      },
       "result_text": {
-        "survive_title": "Survived!",
-        "fail_title": "Did not survive",
-        "survive_takeaway": "You kept warm without running out of energy.",
-        "fail_takeaway": "You gained warmth, but the energy cost was too high."
+        "survive_title": "SURVIVED",
+        "fail_title": "FAILED",
+        "survive_takeaway": "You stayed warm without starving.",
+        "fail_takeaway": "Hypothermia or starvation set in."
       }
     },
     {
       "id": "oxygen",
-      "title": "Low Oxygen",
-      "prompt": "Thin air at high altitude",
-      "pressures": [
-        "Less oxygen enters the lungs each breath.",
-        "Pushing the body too hard has costs."
-      ],
+      "title": "High Altitude",
+      "prompt": "Low oxygen levels and thin air",
       "pick": { "count": 1 },
       "meters": [
-        { "id": "delivery", "label": "Oxygen Delivery", "start": 0 },
-        { "id": "cost", "label": "Physiological Cost", "start": 0 }
+        { "id": "delivery", "label": "O2 Delivery", "start": 0, "min": 1 },
+        { "id": "cost", "label": "Heart Health", "start": 0, "min": 0 }
+      ],
+      "matches": [
+        {
+          "animal": "Llama",
+          "traits": ["big-lungs"],
+          "desc": "Llamas use massive lung capacity to survive the Andes."
+        },
+        {
+          "animal": "Bar-headed Goose",
+          "traits": ["efficient-binding"],
+          "desc": "High-affinity hemoglobin allows these birds to fly over Everest."
+        }
       ],
       "options": [
         {
           "id": "big-lungs",
-          "label": "Bigger lungs",
-          "short": "Move more air each breath",
-          "effects": { "delivery": 3, "cost": -1 },
-          "tradeoff": "Larger chest takes more energy to maintain.",
-          "examples": {
-            "human": "Athletes train to expand lung capacity.",
-            "animal": "Llamas have large lungs." 
-          }
+          "label": "Expanded lung volume",
+          "category": "Structural",
+          "short": "Increase surface area for diffusion",
+          "effects": { "delivery": 3, "cost": -1 }
         },
         {
-          "id": "extra-hemoglobin",
-          "label": "More hemoglobin",
-          "short": "Carry more oxygen in the blood",
-          "effects": { "delivery": 2, "cost": -2 },
-          "tradeoff": "Thicker blood is harder to pump.",
-          "examples": {
-            "human": "High-altitude people make more red cells.",
-            "animal": "Bar-headed geese boost hemoglobin." 
-          }
+          "id": "high-hemoglobin",
+          "label": "Increased Hemoglobin",
+          "category": "Physiological",
+          "short": "More red blood cells to carry O2",
+          "effects": { "delivery": 2, "cost": -2 }
         },
         {
-          "id": "slow-metabolism",
-          "label": "Slow metabolism",
-          "short": "Use less oxygen overall",
-          "effects": { "delivery": 1, "cost": 2 },
-          "tradeoff": "Moves slower and reacts less quickly.",
-          "examples": {
-            "human": "People pace themselves at altitude.",
-            "animal": "Tortoises conserve energy." 
-          }
+          "id": "slow-pace",
+          "label": "Reduced activity",
+          "category": "Behavioral",
+          "short": "Move slowly to conserve O2",
+          "effects": { "delivery": 1, "cost": 2 }
         },
         {
-          "id": "efficient-heart",
-          "label": "Efficient heart",
-          "short": "Moves oxygen with less effort",
-          "effects": { "delivery": 2, "cost": 1 },
-          "tradeoff": "Needs training and strong muscle.",
-          "examples": {
-            "human": "Endurance athletes improve heart efficiency.",
-            "animal": "Snow leopards have strong hearts." 
-          }
+          "id": "efficient-binding",
+          "label": "High-affinity Hemoglobin",
+          "category": "Physiological",
+          "short": "Blood grabs O2 more strongly",
+          "effects": { "delivery": 3, "cost": 0 }
         }
       ],
-      "survival_rule": {
-        "type": "threshold",
-        "thresholds": { "delivery": 1, "cost": 0 }
-      },
       "result_text": {
-        "survive_title": "Survived!",
-        "fail_title": "Did not survive",
-        "survive_takeaway": "You delivered enough oxygen without overloading the body.",
-        "fail_takeaway": "You boosted oxygen, but the costs overwhelmed you."
+        "survive_title": "SURVIVED",
+        "fail_title": "FAILED",
+        "survive_takeaway": "Your adaptations supplied oxygen effectively.",
+        "fail_takeaway": "Systemic failure due to hypoxia."
       }
     }
   ]
