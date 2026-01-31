@@ -1,0 +1,23 @@
+{
+  "home": {
+    "title": "Would You Survive?",
+    "intro": "Build an organism and test it in three extreme zones. Each choice helps in one way but costs you in another.",
+    "start_button": "Start"
+  },
+  "create": {
+    "title": "Create Your Survivor",
+    "name_label": "Optional name",
+    "avatar_label": "Choose an avatar",
+    "continue_button": "Go to Zone 1"
+  },
+  "summary": {
+    "title": "Your Survivor Summary",
+    "big_idea_title": "Big idea",
+    "big_idea_text": "Evolution is all about trade-offs. There are many ways to survive, and every solution has a cost.",
+    "restart_button": "Restart"
+  },
+  "admin": {
+    "title": "Admin / Preview Mode",
+    "description": "Review the zone text and effects below. Edit data/zones.json to update." 
+  }
+}

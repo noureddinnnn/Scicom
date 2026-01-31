@@ -8,29 +8,17 @@
   </head>
   <body>
     <header class="top-bar">
-      <button class="ghost-button" id="homeButton" aria-label="Go to home">Home</button>
       <div class="top-bar__center">
-        <span class="top-bar__title">Would You Survive?</span>
+        <span style="font-weight:bold; font-size:1.2rem; letter-spacing:1px;">SCICOM: EVOLUTION</span>
       </div>
       <div class="top-bar__actions">
-        <button class="ghost-button" id="helpButton" aria-label="Help">Help</button>
-        <button class="ghost-button" id="adminButton" aria-label="Admin preview">Preview</button>
-        <button class="ghost-button" id="resetButton" aria-label="Reset">Reset</button>
+        <button class="ghost-button" id="homeButton">Home</button>
+        <button class="ghost-button" id="resetButton">Reset</button>
       </div>
     </header>
 
     <main id="app" class="app"></main>
-
-    <div id="modal" class="modal hidden" role="dialog" aria-modal="true">
-      <div class="modal__content">
-        <h2>About this model</h2>
-        <p>
-          This experience is a simplified model. Real organisms survive in many different ways, and
-          every adaptation has trade-offs.
-        </p>
-        <button class="primary-button" id="closeModalButton">Got it</button>
-      </div>
-    </div>
+    <div id="modal" class="modal hidden"></div>
 
     <script src="app.js"></script>
   </body>

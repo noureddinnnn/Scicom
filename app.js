@@ -1,391 +1,344 @@
 const appRoot = document.getElementById("app");
-const modal = document.getElementById("modal");
 const homeButton = document.getElementById("homeButton");
 const resetButton = document.getElementById("resetButton");
-const helpButton = document.getElementById("helpButton");
-const adminButton = document.getElementById("adminButton");
-const closeModalButton = document.getElementById("closeModalButton");
+
+// --- 1. Audio Engine (Procedural) ---
+const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+const playSound = (type) => {
+  if (audioCtx.state === 'suspended') audioCtx.resume();
+  const osc = audioCtx.createOscillator();
+  const gain = audioCtx.createGain();
+  osc.connect(gain);
+  gain.connect(audioCtx.destination);
+  const now = audioCtx.currentTime;
+  
+  if (type === 'click') {
+    osc.frequency.setValueAtTime(400, now);
+    gain.gain.setValueAtTime(0.1, now);
+    gain.gain.linearRampToValueAtTime(0, now + 0.1);
+    osc.start(now);
+    osc.stop(now + 0.1);
+  } else if (type === 'tick') {
+    osc.type = 'square';
+    osc.frequency.setValueAtTime(100, now);
+    gain.gain.setValueAtTime(0.02, now);
+    gain.gain.linearRampToValueAtTime(0, now + 0.05);
+    osc.start(now);
+    osc.stop(now + 0.05);
+  } else if (type === 'win') {
+    osc.type = 'triangle';
+    osc.frequency.setValueAtTime(300, now);
+    osc.frequency.linearRampToValueAtTime(600, now + 0.3);
+    gain.gain.setValueAtTime(0.2, now);
+    gain.gain.linearRampToValueAtTime(0, now + 0.8);
+    osc.start(now);
+    osc.stop(now + 0.8);
+  } else if (type === 'fail') {
+    osc.type = 'sawtooth';
+    osc.frequency.setValueAtTime(200, now);
+    osc.frequency.linearRampToValueAtTime(50, now + 0.5);
+    gain.gain.setValueAtTime(0.3, now);
+    gain.gain.linearRampToValueAtTime(0, now + 0.8);
+    osc.start(now);
+    osc.stop(now + 0.8);
+  }
+};
 
 const state = {
   screen: "home",
   zoneIndex: 0,
-  name: "",
-  avatar: "",
+  avatar: "🧬", 
   selections: {},
   results: {},
-  data: null,
-  copy: null
+  data: null
 };
 
-const avatars = ["🧬", "🦎", "🦋", "🐾", "🐘", "🦊"];
-const meterRange = { min: -5, max: 5 };
+const avatars = ["🦠", "🧬", "🦐", "🦎", "🐻", "🐜"];
 
 const loadData = async () => {
-  const [zonesResponse, copyResponse] = await Promise.all([
-    fetch("data/zones.json"),
-    fetch("data/copy.json")
-  ]);
-
-  state.data = await zonesResponse.json();
-  state.copy = await copyResponse.json();
+  const r = await fetch("data/zones.json");
+  state.data = await r.json();
   render();
 };
 
 const resetState = () => {
   state.screen = "home";
   state.zoneIndex = 0;
-  state.name = "";
-  state.avatar = "";
   state.selections = {};
   state.results = {};
+  document.body.className = "";
 };
 
 const setScreen = (screen) => {
+  playSound('click');
   state.screen = screen;
   render();
 };
 
-const toggleModal = (open) => {
-  if (open) {
-    modal.classList.remove("hidden");
-  } else {
-    modal.classList.add("hidden");
-  }
-};
-
 const render = () => {
-  if (!state.data || !state.copy) {
-    appRoot.innerHTML = "<div class='screen'><p>Loading...</p></div>";
-    return;
+  if (!state.data) return;
+  
+  // Weather & Theme
+  appRoot.innerHTML = `<div class="weather-layer"></div><div id="content"></div>`;
+  const content = document.getElementById("content");
+  
+  if (state.screen === 'zone' || state.screen === 'simulation') {
+    const zoneId = state.data.zones[state.zoneIndex].id;
+    document.body.className = `theme-${zoneId}`;
+  } else {
+    document.body.className = "";
   }
 
-  if (state.screen === "home") {
-    renderHome();
-  } else if (state.screen === "create") {
-    renderCreate();
-  } else if (state.screen === "zone") {
-    renderZone();
-  } else if (state.screen === "summary") {
-    renderSummary();
-  } else if (state.screen === "admin") {
-    renderAdmin();
+  let html = "";
+  switch(state.screen) {
+    case "home": html = renderHome(); break;
+    case "create": html = renderCreate(); break;
+    case "zone": html = renderZone(); break;
+    case "summary": html = renderSummary(); break;
   }
+  content.innerHTML = html;
+
+  if (state.screen === "home") document.getElementById("startButton").onclick = () => { audioCtx.resume(); setScreen("create"); };
+  if (state.screen === "zone") document.getElementById("testBtn").onclick = () => startSimulation();
 };
 
-const renderHome = () => {
-  const { home } = state.copy;
-  appRoot.innerHTML = `
-    <section class="screen">
-      <h1>${home.title}</h1>
-      <p>${home.intro}</p>
-      <div class="button-row">
-        <button class="primary-button" id="startButton">${home.start_button}</button>
-      </div>
-    </section>
-  `;
+const renderHome = () => `
+  <section class="screen" style="text-align:center">
+    <h1>SCICOM: EVOLUTION</h1>
+    <p style="font-size:1.4rem;">Can you maintain homeostasis in extreme environments?</p>
+    <button class="primary-button" id="startButton">Start Simulation</button>
+  </section>
+`;
 
-  document.getElementById("startButton").addEventListener("click", () => {
-    setScreen("create");
-  });
-};
-
-const renderCreate = () => {
-  const { create } = state.copy;
-  appRoot.innerHTML = `
-    <section class="screen">
-      <h2>${create.title}</h2>
-      <label>
-        ${create.name_label}
-        <input type="text" id="nameInput" placeholder="Name (optional)" value="${state.name}" />
-      </label>
-      <h3>${create.avatar_label}</h3>
-      <div class="avatar-grid" id="avatarGrid"></div>
-      <div class="button-row">
-        <button class="primary-button" id="toZoneButton">${create.continue_button}</button>
-      </div>
-    </section>
-  `;
-
-  const avatarGrid = document.getElementById("avatarGrid");
-  avatarGrid.innerHTML = avatars
-    .map(
-      (icon) => `
-        <button class="avatar-button ${state.avatar === icon ? "selected" : ""}" data-icon="${icon}">
+const renderCreate = () => `
+  <section class="screen">
+    <h2>Select Organism</h2>
+    <div class="avatar-grid">
+      ${avatars.map(icon => `
+        <button class="avatar-btn ${state.avatar === icon ? 'selected' : ''}" 
+                onclick="state.avatar='${icon}'; playSound('click'); render();">
           ${icon}
         </button>
-      `
-    )
-    .join("");
-
-  avatarGrid.querySelectorAll("button").forEach((button) => {
-    button.addEventListener("click", () => {
-      state.avatar = button.dataset.icon;
-      renderCreate();
-    });
-  });
-
-  document.getElementById("nameInput").addEventListener("input", (event) => {
-    state.name = event.target.value;
-  });
-
-  document.getElementById("toZoneButton").addEventListener("click", () => {
-    state.zoneIndex = 0;
-    setScreen("zone");
-  });
-};
+      `).join('')}
+    </div>
+    <div class="button-row">
+      <button class="primary-button" onclick="setScreen('zone')">Enter Zone 1</button>
+    </div>
+  </section>
+`;
 
 const renderZone = () => {
   const zone = state.data.zones[state.zoneIndex];
   const selected = state.selections[zone.id] || [];
-  const result = state.results[zone.id];
-
-  appRoot.innerHTML = `
+  
+  return `
     <section class="screen">
-      <h2>${zone.title}</h2>
-      <p><strong>${zone.prompt}</strong></p>
-      <ul>
-        ${zone.pressures.map((pressure) => `<li>${pressure}</li>`).join("")}
-      </ul>
-      <div class="tag">Pick ${zone.pick.count} trait${zone.pick.count > 1 ? "s" : ""} (${selected.length} selected)</div>
-      <div class="card-grid" id="optionsGrid"></div>
-      <div class="button-row">
-        <button class="primary-button" id="testButton" ${selected.length !== zone.pick.count ? "disabled" : ""}>Test survival</button>
+      <div style="display:flex; justify-content:space-between; align-items:center;">
+        <h2>${zone.title}</h2>
+        <div style="font-size:2rem;">${state.avatar}</div>
       </div>
-      <div id="resultPanel"></div>
+      <p><strong>Abiotic Factors:</strong> ${zone.prompt}</p>
+      
+      <div class="card-grid">
+        ${zone.options.map(opt => `
+          <button class="option-card ${selected.includes(opt.id) ? 'selected' : ''}" 
+                  onclick="toggleSelection('${zone.id}', '${opt.id}')">
+            <span class="category-tag cat-${opt.category.toLowerCase()}">${opt.category}</span>
+            <h4>${opt.label}</h4>
+            <p>${opt.short}</p>
+          </button>
+        `).join('')}
+      </div>
+
+      <div class="button-row">
+        <button class="primary-button" id="testBtn" ${selected.length !== zone.pick.count ? 'disabled' : ''}>
+          Begin Simulation
+        </button>
+      </div>
+      <div id="simPanel"></div>
     </section>
   `;
+};
 
-  const optionsGrid = document.getElementById("optionsGrid");
-  optionsGrid.innerHTML = zone.options
-    .map(
-      (option) => `
-        <button class="option-card ${selected.includes(option.id) ? "selected" : ""}" data-id="${option.id}">
-          <h4>${option.label}</h4>
-          <p>${option.short}</p>
-        </button>
-      `
-    )
-    .join("");
-
-  optionsGrid.querySelectorAll("button").forEach((button) => {
-    button.addEventListener("click", () => {
-      const id = button.dataset.id;
-      const current = state.selections[zone.id] || [];
-      if (current.includes(id)) {
-        state.selections[zone.id] = current.filter((item) => item !== id);
-      } else if (current.length < zone.pick.count) {
-        state.selections[zone.id] = [...current, id];
-      }
-      renderZone();
-    });
-  });
-
-  document.getElementById("testButton").addEventListener("click", () => {
-    const computed = computeResult(zone, state.selections[zone.id]);
-    state.results[zone.id] = computed;
-    renderZone();
-  });
-
-  if (result) {
-    const resultPanel = document.getElementById("resultPanel");
-    resultPanel.innerHTML = renderResultPanel(zone, result);
-    document.getElementById("continueButton").addEventListener("click", () => {
-      if (state.zoneIndex < state.data.zones.length - 1) {
-        state.zoneIndex += 1;
-        setScreen("zone");
-      } else {
-        setScreen("summary");
-      }
-    });
+window.toggleSelection = (zoneId, optId) => {
+  playSound('click');
+  const zone = state.data.zones.find(z => z.id === zoneId);
+  let current = state.selections[zoneId] || [];
+  
+  if (current.includes(optId)) {
+    current = current.filter(id => id !== optId);
+  } else if (current.length < zone.pick.count) {
+    current.push(optId);
   }
+  
+  state.selections[zoneId] = current;
+  render();
+};
+
+const startSimulation = () => {
+  const zone = state.data.zones[state.zoneIndex];
+  const selectedIds = state.selections[zone.id];
+  const computed = computeResult(zone, selectedIds);
+  state.results[zone.id] = computed;
+
+  const panel = document.getElementById("simPanel");
+  document.getElementById("testBtn").style.display = 'none';
+
+  panel.innerHTML = `
+    <div class="sim-container">
+      <h3>Simulating Environment...</h3>
+      <div class="sim-avatar">${state.avatar}</div>
+      <div class="graph-container">
+        <canvas id="liveGraph" width="600" height="150"></canvas>
+      </div>
+      <div id="simLog">Initializing homeostasis...</div>
+    </div>
+  `;
+
+  let hp = 100;
+  let tick = 0;
+  const history = [100];
+  const canvas = document.getElementById("liveGraph");
+  
+  const timer = setInterval(() => {
+    tick++;
+    playSound('tick');
+    
+    // If they survived, slight decay. If failed, heavy damage.
+    const damage = computed.survived ? 0.5 : 4.0;
+    hp -= (damage + Math.random());
+    history.push(hp);
+    
+    drawGraph(canvas, history);
+    
+    if (tick >= 40 || hp <= 0) {
+      clearInterval(timer);
+      showResult(zone, computed, hp > 0);
+    }
+  }, 80);
+};
+
+const drawGraph = (canvas, data) => {
+  const ctx = canvas.getContext('2d');
+  const w = canvas.width;
+  const h = canvas.height;
+  ctx.clearRect(0, 0, w, h);
+  ctx.strokeStyle = '#00d2d3';
+  ctx.lineWidth = 3;
+  ctx.beginPath();
+  const step = w / 40; 
+  data.forEach((val, i) => {
+    const y = h - ((val / 100) * h);
+    if (i===0) ctx.moveTo(0, y); else ctx.lineTo(i * step, y);
+  });
+  ctx.stroke();
+};
+
+const showResult = (zone, result, alive) => {
+  const isSuccess = result.survived;
+  playSound(isSuccess ? 'win' : 'fail');
+  const panel = document.getElementById("simPanel");
+  
+  // Match Logic
+  let matchHtml = '';
+  if (isSuccess && zone.matches) {
+    const selectedIds = state.selections[zone.id];
+    const match = zone.matches.find(m => m.traits.every(t => selectedIds.includes(t)));
+    if (match) {
+      matchHtml = `
+        <div class="match-card">
+          <h3>🌟 EVOLUTION MATCH: ${match.animal}</h3>
+          <p>${match.desc}</p>
+        </div>
+      `;
+    }
+  }
+
+  const title = isSuccess ? zone.result_text.survive_title : zone.result_text.fail_title;
+  const color = isSuccess ? "var(--success)" : "var(--danger)";
+  let reason = isSuccess ? zone.result_text.survive_takeaway : `Failure Reason: ${result.failedMeters.join(" & ")} levels were too low.`;
+
+  panel.innerHTML = `
+    <div class="result-panel" style="margin-top:2rem; padding-top:1rem; border-top:2px solid ${color}">
+      <h2 style="color:${color}">${title}</h2>
+      ${matchHtml}
+      <p><strong>${reason}</strong></p>
+      
+      <div class="meters-container">
+        ${zone.meters.map(m => renderBar(m, result.totals[m.id])).join('')}
+      </div>
+
+      <button class="primary-button" onclick="nextZone()">
+        ${state.zoneIndex < state.data.zones.length - 1 ? "Next Zone" : "View Final Summary"}
+      </button>
+    </div>
+  `;
+};
+
+const renderBar = (meter, value) => {
+  const min = meter.min;
+  // Normalize visually for display
+  const displayVal = Math.max(-3, Math.min(5, value)); 
+  const percent = ((displayVal + 3) / 8) * 100;
+  const thresholdPercent = ((min + 3) / 8) * 100;
+  
+  const isOk = value >= min;
+  const color = isOk ? 'var(--success)' : 'var(--danger)';
+
+  return `
+    <div class="meter-box">
+      <div class="meter-label">
+        <span>${meter.label}</span>
+        <span>${value} (Need ${min})</span>
+      </div>
+      <div class="meter-track">
+        <div class="meter-threshold-line" style="left:${thresholdPercent}%"></div>
+        <div class="meter-fill" style="width:${percent}%; background-color:${color}"></div>
+      </div>
+    </div>
+  `;
 };
 
 const computeResult = (zone, selectedIds) => {
   const totals = {};
-  zone.meters.forEach((meter) => {
-    totals[meter.id] = meter.start;
+  zone.meters.forEach(m => totals[m.id] = m.start);
+  const options = zone.options.filter(o => selectedIds.includes(o.id));
+  options.forEach(o => {
+    Object.entries(o.effects).forEach(([k, v]) => totals[k] = (totals[k]||0) + v);
   });
 
-  const selectedOptions = zone.options.filter((option) => selectedIds.includes(option.id));
-  selectedOptions.forEach((option) => {
-    Object.entries(option.effects).forEach(([key, value]) => {
-      totals[key] = (totals[key] || 0) + value;
-    });
+  const failedMeters = [];
+  const passed = zone.meters.every(m => {
+    const val = totals[m.id];
+    if (val < m.min) failedMeters.push(m.label);
+    return val >= m.min;
   });
 
-  const thresholds = zone.survival_rule.thresholds;
-  const survived = Object.entries(thresholds).every(([key, value]) => totals[key] >= value);
-
-  return {
-    survived,
-    totals,
-    selectedOptions
-  };
+  return { survived: passed, totals, failedMeters };
 };
 
-const renderResultPanel = (zone, result) => {
-  const title = result.survived ? zone.result_text.survive_title : zone.result_text.fail_title;
-  const takeaway = result.survived ? zone.result_text.survive_takeaway : zone.result_text.fail_takeaway;
-
-  return `
-    <div class="result-panel">
-      <div class="result-title ${result.survived ? "success" : "fail"}">${title}</div>
-      <p>${takeaway}</p>
-      <div class="meter-list">
-        ${zone.meters
-          .map((meter) => renderMeter(meter, result.totals[meter.id], zone.survival_rule.thresholds[meter.id]))
-          .join("")}
-      </div>
-      <h3>Trade-offs</h3>
-      <ul>
-        ${result.selectedOptions.map((option) => `<li>${option.tradeoff}</li>`).join("")}
-      </ul>
-      <h3>Examples</h3>
-      <ul>
-        ${result.selectedOptions
-          .map(
-            (option) => `
-              <li><strong>Human:</strong> ${option.examples.human}</li>
-              <li><strong>Animal:</strong> ${option.examples.animal}</li>
-            `
-          )
-          .join("")}
-      </ul>
-      <div class="button-row">
-        <button class="primary-button" id="continueButton">Continue</button>
-      </div>
-    </div>
-  `;
-};
-
-const renderMeter = (meter, value, threshold) => {
-  const range = meterRange.max - meterRange.min;
-  const normalized = Math.max(meterRange.min, Math.min(meterRange.max, value));
-  const percent = ((normalized - meterRange.min) / range) * 100;
-  const fillWidth = Math.abs(percent - 50);
-  const isNegative = percent < 50;
-
-  return `
-    <div class="meter">
-      <div class="meter-header">
-        <span>${meter.label}</span>
-        <span>${value} (need ≥ ${threshold})</span>
-      </div>
-      <div class="meter-bar">
-        <div class="meter-fill ${isNegative ? "negative" : ""}" style="--fill:${fillWidth}%;"></div>
-      </div>
-      <div class="meter-threshold">Scale: ${meterRange.min} to ${meterRange.max}</div>
-    </div>
-  `;
+const nextZone = () => {
+  if (state.zoneIndex < state.data.zones.length - 1) {
+    state.zoneIndex++;
+    setScreen("zone");
+  } else {
+    setScreen("summary");
+  }
 };
 
 const renderSummary = () => {
-  const { summary } = state.copy;
-  const name = state.name ? state.name : "Your survivor";
+  const wins = Object.values(state.results).filter(r=>r.survived).length;
   appRoot.innerHTML = `
-    <section class="screen">
-      <h2>${summary.title}</h2>
-      <p><strong>${name}</strong> ${state.avatar ? `(${state.avatar})` : ""}</p>
-      <ul class="summary-list">
-        ${state.data.zones
-          .map((zone) => {
-            const selections = (state.selections[zone.id] || []).map((id) => {
-              const option = zone.options.find((item) => item.id === id);
-              return option ? option.label : "";
-            });
-            return `
-              <li class="summary-card">
-                <h3>${zone.title}</h3>
-                <p>${selections.join(", ") || "No traits chosen"}</p>
-              </li>
-            `;
-          })
-          .join("")}
-      </ul>
-      <h3>${summary.big_idea_title}</h3>
-      <p>${summary.big_idea_text}</p>
-      <div class="button-row">
-        <button class="primary-button" id="restartButton">${summary.restart_button}</button>
-      </div>
-    </section>
-  `;
-
-  document.getElementById("restartButton").addEventListener("click", () => {
-    resetState();
-    render();
-  });
-};
-
-const renderAdmin = () => {
-  const { admin } = state.copy;
-  const zones = state.data.zones;
-  appRoot.innerHTML = `
-    <section class="screen">
-      <h2>${admin.title}</h2>
-      <p>${admin.description}</p>
-      ${zones
-        .map(
-          (zone) => `
-            <div class="admin-section">
-              <h3>${zone.title}</h3>
-              <p><strong>Prompt:</strong> ${zone.prompt}</p>
-              <table class="admin-table">
-                <thead>
-                  <tr>
-                    <th>Trait</th>
-                    <th>Short</th>
-                    <th>Effects</th>
-                    <th>Trade-off</th>
-                    <th>Human example</th>
-                    <th>Animal example</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  ${zone.options
-                    .map(
-                      (option) => `
-                        <tr>
-                          <td>${option.label}</td>
-                          <td>${option.short}</td>
-                          <td>${Object.entries(option.effects)
-                            .map(([key, value]) => `${key}: ${value}`)
-                            .join(", ")}</td>
-                          <td>${option.tradeoff}</td>
-                          <td>${option.examples.human}</td>
-                          <td>${option.examples.animal}</td>
-                        </tr>
-                      `
-                    )
-                    .join("")}
-                </tbody>
-              </table>
-            </div>
-          `
-        )
-        .join("")}
+    <section class="screen" style="text-align:center">
+      <h1>Evolution Complete</h1>
+      <div style="font-size:4rem; margin:1rem;">${state.avatar}</div>
+      <h2>You survived ${wins} / 3 Environments</h2>
+      <button class="primary-button" onclick="resetState(); render();">Evolve Again</button>
     </section>
   `;
 };
 
-homeButton.addEventListener("click", () => {
-  resetState();
-  render();
-});
-
-resetButton.addEventListener("click", () => {
-  const confirmed = window.confirm("Reset this run for the next visitor?");
-  if (confirmed) {
-    resetState();
-    render();
-  }
-});
-
-helpButton.addEventListener("click", () => toggleModal(true));
-closeModalButton.addEventListener("click", () => toggleModal(false));
-
-adminButton.addEventListener("click", () => {
-  state.screen = state.screen === "admin" ? "home" : "admin";
-  render();
-});
+homeButton.onclick = () => { resetState(); render(); };
+resetButton.onclick = () => { resetState(); render(); };
 
 loadData();

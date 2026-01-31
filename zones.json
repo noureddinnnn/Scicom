@@ -1,0 +1,194 @@
+{
+  "zones": [
+    {
+      "id": "desert",
+      "title": "Hot Desert",
+      "prompt": "Extreme heat (45°C+) and water scarcity",
+      "pick": { "count": 2 },
+      "meters": [
+        { "id": "heat", "label": "Cooling", "start": 0, "min": 1 },
+        { "id": "water", "label": "Hydration", "start": 0, "min": 1 }
+      ],
+      "matches": [
+        {
+          "animal": "Fennec Fox",
+          "traits": ["nocturnal", "large-ears"],
+          "desc": "Like the Fennec Fox, you avoid the sun and radiate heat."
+        },
+        {
+          "animal": "Camel",
+          "traits": ["water-storage", "concentrated-urine"],
+          "desc": "Classic Camel strategy: Store water and don't waste a drop."
+        }
+      ],
+      "options": [
+        {
+          "id": "nocturnal",
+          "label": "Nocturnal behaviour",
+          "category": "Behavioral",
+          "short": "Active at night to avoid solar radiation",
+          "effects": { "heat": 2, "water": 1 }
+        },
+        {
+          "id": "sweat",
+          "label": "High sweating rate",
+          "category": "Physiological",
+          "short": "Evaporative cooling mechanism",
+          "effects": { "heat": 3, "water": -3 }
+        },
+        {
+          "id": "light-color",
+          "label": "Pale pigmentation",
+          "category": "Structural",
+          "short": "Reflects solar radiation (High Albedo)",
+          "effects": { "heat": 2, "water": 0 }
+        },
+        {
+          "id": "large-ears",
+          "label": "Large ears",
+          "category": "Structural",
+          "short": "Increases Surface Area to Volume ratio",
+          "effects": { "heat": 2, "water": 0 }
+        },
+        {
+          "id": "concentrated-urine",
+          "label": "Concentrated urine",
+          "category": "Physiological",
+          "short": "Loop of Henle reabsorbs water",
+          "effects": { "heat": 0, "water": 3 }
+        },
+        {
+          "id": "water-storage",
+          "label": "Fatty Hump",
+          "category": "Structural",
+          "short": "Metabolic water storage",
+          "effects": { "heat": 1, "water": 3 }
+        }
+      ],
+      "result_text": {
+        "survive_title": "SURVIVED",
+        "fail_title": "FAILED",
+        "survive_takeaway": "Your organism maintained homeostasis!",
+        "fail_takeaway": "Your organism could not cope with the environment."
+      }
+    },
+    {
+      "id": "cold",
+      "title": "Arctic Tundra",
+      "prompt": "Sub-zero temperatures (-30°C) and limited food",
+      "pick": { "count": 2 },
+      "meters": [
+        { "id": "heat", "label": "Insulation", "start": 0, "min": 1 },
+        { "id": "energy", "label": "Energy Reserves", "start": 0, "min": 1 }
+      ],
+      "matches": [
+        {
+          "animal": "Polar Bear",
+          "traits": ["thick-fur", "large-body"],
+          "desc": "You built a tank! Large body and thick fur is the Polar Bear way."
+        }
+      ],
+      "options": [
+        {
+          "id": "thick-fur",
+          "label": "Thick fur/blubber",
+          "category": "Structural",
+          "short": "Traps air to reduce conduction",
+          "effects": { "heat": 3, "energy": -1 }
+        },
+        {
+          "id": "hibernation",
+          "label": "Hibernation",
+          "category": "Physiological",
+          "short": "Lower metabolic rate to save energy",
+          "effects": { "heat": 1, "energy": 3 }
+        },
+        {
+          "id": "large-body",
+          "label": "Large body mass",
+          "category": "Structural",
+          "short": "Low Surface Area to Volume ratio",
+          "effects": { "heat": 2, "energy": -2 }
+        },
+        {
+          "id": "shivering",
+          "label": "Shivering response",
+          "category": "Physiological",
+          "short": "Muscle spasms generate heat",
+          "effects": { "heat": 2, "energy": -3 }
+        },
+        {
+          "id": "huddling",
+          "label": "Huddling",
+          "category": "Behavioral",
+          "short": "Group body heat sharing",
+          "effects": { "heat": 2, "energy": 1 }
+        }
+      ],
+      "result_text": {
+        "survive_title": "SURVIVED",
+        "fail_title": "FAILED",
+        "survive_takeaway": "You stayed warm without starving.",
+        "fail_takeaway": "Hypothermia or starvation set in."
+      }
+    },
+    {
+      "id": "oxygen",
+      "title": "High Altitude",
+      "prompt": "Low oxygen levels and thin air",
+      "pick": { "count": 1 },
+      "meters": [
+        { "id": "delivery", "label": "O2 Delivery", "start": 0, "min": 1 },
+        { "id": "cost", "label": "Heart Health", "start": 0, "min": 0 }
+      ],
+      "matches": [
+        {
+          "animal": "Llama",
+          "traits": ["big-lungs"],
+          "desc": "Llamas use massive lung capacity to survive the Andes."
+        },
+        {
+          "animal": "Bar-headed Goose",
+          "traits": ["efficient-binding"],
+          "desc": "High-affinity hemoglobin allows these birds to fly over Everest."
+        }
+      ],
+      "options": [
+        {
+          "id": "big-lungs",
+          "label": "Expanded lung volume",
+          "category": "Structural",
+          "short": "Increase surface area for diffusion",
+          "effects": { "delivery": 3, "cost": -1 }
+        },
+        {
+          "id": "high-hemoglobin",
+          "label": "Increased Hemoglobin",
+          "category": "Physiological",
+          "short": "More red blood cells to carry O2",
+          "effects": { "delivery": 2, "cost": -2 }
+        },
+        {
+          "id": "slow-pace",
+          "label": "Reduced activity",
+          "category": "Behavioral",
+          "short": "Move slowly to conserve O2",
+          "effects": { "delivery": 1, "cost": 2 }
+        },
+        {
+          "id": "efficient-binding",
+          "label": "High-affinity Hemoglobin",
+          "category": "Physiological",
+          "short": "Blood grabs O2 more strongly",
+          "effects": { "delivery": 3, "cost": 0 }
+        }
+      ],
+      "result_text": {
+        "survive_title": "SURVIVED",
+        "fail_title": "FAILED",
+        "survive_takeaway": "Your adaptations supplied oxygen effectively.",
+        "fail_takeaway": "Systemic failure due to hypoxia."
+      }
+    }
+  ]
+}
