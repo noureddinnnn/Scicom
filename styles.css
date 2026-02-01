@@ -15,11 +15,15 @@
 /* Dynamic Zone Themes */
 body.theme-desert {
   --bg: #2b1d0e; --panel: #3d2612; --accent: #ff9f43; --card-bg: #52361b;
-  background: radial-gradient(circle at top, #5e3a18, #2b1d0e);
+  background:
+    linear-gradient(180deg, #7c4b1f 0%, #d9b26a 55%, #c69a56 100%),
+    repeating-linear-gradient(120deg, rgba(255,255,255,0.06) 0 18px, rgba(0,0,0,0) 18px 36px);
 }
 body.theme-cold {
   --bg: #0a1829; --panel: #132742; --accent: #54a0ff; --card-bg: #1e3b63;
-  background: radial-gradient(circle at top, #1e3c72, #0a1829);
+  background:
+    linear-gradient(180deg, #e5f6ff 0%, #b7d6f0 40%, #6b8fb7 100%),
+    radial-gradient(circle at 20% 20%, rgba(255,255,255,0.5), rgba(255,255,255,0) 45%);
 }
 body.theme-oxygen {
   --bg: #111; --panel: #222; --accent: #a55eea; --card-bg: #333;
