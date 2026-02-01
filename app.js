@@ -344,6 +344,8 @@ const nextZone = () => {
 
 const renderSummary = () => {
   const wins = Object.values(state.results).filter(r=>r.survived).length;
+  const totalZones = state.data.zones.length;
+  const survivalRate = Math.round((wins / totalZones) * 100);
   const adaptations = state.data.zones.map(zone => {
     const selectedIds = state.selections[zone.id] || [];
     const selectedLabels = zone.options
@@ -356,11 +358,18 @@ const renderSummary = () => {
       </li>
     `;
   }).join("");
+  const lessonText = wins === totalZones
+    ? "Perfect balance! You matched every environment by combining traits that reinforced each other."
+    : wins === 0
+      ? "Every environment pushed your organism past its limits. Next time, pair traits that cover both pressures in each biome."
+      : "You survived some environments by pairing complementary traits. Aim for balance across heat, energy, and oxygen needs.";
   appRoot.innerHTML = `
     <section class="screen" style="text-align:center">
       <h1>Evolution Complete</h1>
       <div style="font-size:4rem; margin:1rem;">${state.avatar}</div>
-      <h2>${state.playerName ? `${state.playerName}, ` : ""}you survived ${wins} / 3 Environments</h2>
+      <h2>${state.playerName ? `${state.playerName}, ` : ""}you survived ${wins} / ${totalZones} environments</h2>
+      <p style="font-size:1.1rem; margin:0.5rem 0 0;">Survival rate: <strong>${survivalRate}%</strong></p>
+      <p class="helper-text" style="margin-top:0.75rem;">${lessonText}</p>
       <div class="summary-section" style="margin-top:1.5rem; text-align:left;">
         <h3>Chosen Adaptations Summary</h3>
         <ul class="summary-list">
