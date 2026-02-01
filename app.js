@@ -110,7 +110,7 @@ const renderHome = () => `
       <h1 class="home-title">Would You Survive?</h1>
       <p class="home-subtitle">Can you maintain homeostasis in extreme environments?</p>
     </div>
-    <button class="primary-button" id="startButton">Start Simulation</button>
+    <button class="primary-button start-button" id="startButton">Start Simulation</button>
     <div class="home-credits">
       <span>Created by Noureddin Ismail and Dylan Wimble</span>
       <span>Oxford Museum of Natural History</span>
