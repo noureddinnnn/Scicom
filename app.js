@@ -47,14 +47,14 @@ const playSound = (type) => {
 const state = {
   screen: "home",
   zoneIndex: 0,
-  avatar: "🧬", 
+  avatar: "🐻‍❄️", 
   playerName: "",
   selections: {},
   results: {},
   data: null
 };
 
-const avatars = ["🦠", "🧬", "🦐", "🦎", "🐻", "🐜"];
+const avatars = ["🐻‍❄️", "🦒", "🪿", "🐫"];
 
 const loadData = async () => {
   const r = await fetch("data/zones.json");
