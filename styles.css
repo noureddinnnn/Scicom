@@ -128,8 +128,8 @@ h2 { border-bottom: 2px solid var(--accent); display: inline-block; padding-bott
 
 .home-credits {
   position: absolute;
-  right: 1.5rem;
-  bottom: 1.25rem;
+  right: 0.5rem;
+  bottom: 0.5rem;
   text-align: right;
   font-size: 0.85rem;
   color: var(--muted);
@@ -201,6 +201,37 @@ h2 { border-bottom: 2px solid var(--accent); display: inline-block; padding-bott
 }
 .primary-button:hover { transform: scale(1.05); }
 .primary-button:disabled { filter: grayscale(1); opacity: 0.5; cursor: not-allowed; }
+
+.start-button {
+  background: linear-gradient(135deg, #54a0ff, #2e86de);
+  color: #0b1320;
+  box-shadow: 0 12px 24px rgba(46, 134, 222, 0.35);
+  position: relative;
+  overflow: hidden;
+}
+.start-button::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 0;
+  height: 0;
+  background: rgba(255, 255, 255, 0.4);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  opacity: 0;
+}
+.start-button:active {
+  transform: translateY(2px) scale(0.98);
+  box-shadow: 0 6px 12px rgba(46, 134, 222, 0.4);
+}
+.start-button:active::after {
+  animation: startPulse 0.4s ease;
+}
+@keyframes startPulse {
+  0% { width: 0; height: 0; opacity: 0.6; }
+  100% { width: 200%; height: 200%; opacity: 0; }
+}
 
 /* Simulation & Graph */
 .sim-container {
