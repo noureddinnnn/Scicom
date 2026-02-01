@@ -106,9 +106,15 @@ const render = () => {
 
 const renderHome = () => `
   <section class="screen" style="text-align:center">
-    <h1>SCICOM: EVOLUTION</h1>
-    <p style="font-size:1.4rem;">Can you maintain homeostasis in extreme environments?</p>
+    <div class="home-hero">
+      <h1 class="home-title">Would You Survive?</h1>
+      <p class="home-subtitle">Can you maintain homeostasis in extreme environments?</p>
+    </div>
     <button class="primary-button" id="startButton">Start Simulation</button>
+    <div class="home-credits">
+      <span>Created by Noureddin Ismail and Dylan Wimble</span>
+      <span>Oxford Museum of Natural History</span>
+    </div>
   </section>
 `;
 
