@@ -47,14 +47,14 @@ const playSound = (type) => {
 const state = {
   screen: "home",
   zoneIndex: 0,
-  avatar: "🧬", 
+  avatar: "🐻‍❄️", 
   playerName: "",
   selections: {},
   results: {},
   data: null
 };
 
-const avatars = ["🦠", "🧬", "🦐", "🦎", "🐻", "🐜"];
+const avatars = ["🐻‍❄️", "🦒", "🪿", "🐫"];
 
 const loadData = async () => {
   const r = await fetch("data/zones.json");
@@ -151,6 +151,9 @@ const renderZone = () => {
         <div style="font-size:2rem;">${state.avatar}</div>
       </div>
       <p><strong>Abiotic Factors:</strong> ${zone.prompt}</p>
+      <p class="helper-text">
+        Pick ${zone.pick.count} factor${zone.pick.count === 1 ? "" : "s"}. Hint: ${zone.hint}
+      </p>
       
       <div class="card-grid">
         ${zone.options.map(opt => `
