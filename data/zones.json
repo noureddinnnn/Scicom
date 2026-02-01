@@ -4,6 +4,7 @@
       "id": "desert",
       "title": "Hot Desert",
       "prompt": "Extreme heat (45°C+) and water scarcity",
+      "hint": "Balance heat relief with water-saving traits so you stay cool without drying out.",
       "pick": { "count": 2 },
       "meters": [
         { "id": "heat", "label": "Cooling", "start": 0, "min": 1 },
@@ -76,6 +77,7 @@
       "id": "cold",
       "title": "Arctic Tundra",
       "prompt": "Sub-zero temperatures (-30°C) and limited food",
+      "hint": "Pair insulation with energy-saving adaptations to keep warm without burning reserves.",
       "pick": { "count": 2 },
       "meters": [
         { "id": "heat", "label": "Insulation", "start": 0, "min": 1 },
@@ -136,6 +138,7 @@
       "id": "oxygen",
       "title": "High Altitude",
       "prompt": "Low oxygen levels and thin air",
+      "hint": "Choose traits that boost oxygen delivery without overstressing the heart.",
       "pick": { "count": 1 },
       "meters": [
         { "id": "delivery", "label": "O2 Delivery", "start": 0, "min": 1 },
